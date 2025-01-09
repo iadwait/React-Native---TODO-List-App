@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Task from './src/components/Tasks'
 import React, {useState} from 'react'
 
@@ -8,9 +8,16 @@ export default function App() {
   const [taskItems, setTaskItems] = useState([]);
 
   const handleAddTask = () => {
+    Keyboard.dismiss()
     console.log(task)
     setTaskItems([...taskItems, task])
     setTask(null)
+  }
+
+  const completeTask = (index) => {
+    let itemsCopy = [...taskItems]
+    itemsCopy.splice(index, 1)
+    setTaskItems(itemsCopy);
   }
 
   return (
@@ -22,9 +29,19 @@ export default function App() {
         {/* Tasks View */}
         <View style={styles.items}>
           {
-            taskItems.map((item, index) => {
-              return <Task key={index} text={item} />
-            })
+            taskItems.length > 0 ? (
+              taskItems.map((item, index) => {
+                return (
+                  <TouchableOpacity key={index} onPress={() => completeTask(index)}>
+                    <Task text={item} />
+                  </TouchableOpacity>
+                )
+              })
+            ) : (
+               (
+                <Text> No Taks Available </Text>
+              )
+            )
           }
         </View>
       </View>
@@ -60,7 +77,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   items: {
-    marginTop: 30
+    marginTop: 30,
   },
   writeTaskWrapper: {
     flex: 1,
