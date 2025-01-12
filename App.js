@@ -38,9 +38,11 @@ export default function App() {
                 )
               })
             ) : (
-               (
-                <Text> No Taks Available </Text>
-              )
+                (
+                  <View style={styles.noTaskContainer}>
+                    <Text> No Taks Available </Text>
+                  </View>
+                )
             )
           }
         </View>
@@ -71,6 +73,7 @@ const styles = StyleSheet.create({
   tasksWrapper: {
     paddingTop: Platform.OS === 'ios' ? 80 : 60,
     paddingHorizontal: 20,
+    flex: 1
   },
   sectionTitle: {
     fontSize: 24,
@@ -78,6 +81,7 @@ const styles = StyleSheet.create({
   },
   items: {
     marginTop: 30,
+    flex: 1
   },
   writeTaskWrapper: {
     flex: 1,
@@ -108,5 +112,14 @@ const styles = StyleSheet.create({
     borderColor: "#C0C0C0",
     borderWidth: 1
   },
-  addText: {},
+  addText: {
+    fontSize: 30,
+    color: 'black'
+  },
+  noTaskContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: '80'
+  }
 });

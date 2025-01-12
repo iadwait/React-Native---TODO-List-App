@@ -23,7 +23,8 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        width: '100%'
     },
     itemLeft: {
         flexDirection: 'row',
