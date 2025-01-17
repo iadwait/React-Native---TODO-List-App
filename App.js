@@ -1,8 +1,14 @@
-import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Task from './src/components/Tasks'
 import React, {useState} from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect } from 'react'
 
 export default function App() {
+
+  useEffect(() => {
+    retriveTasks()
+  },[])
 
   const [task, setTask] = useState();
   const [taskItems, setTaskItems] = useState([]);
@@ -10,14 +16,43 @@ export default function App() {
   const handleAddTask = () => {
     Keyboard.dismiss()
     console.log(task)
-    setTaskItems([...taskItems, task])
+    const newTaskItems = [...taskItems, task]
+    setTaskItems(newTaskItems)
     setTask(null)
+    storeTaskLocally(newTaskItems)
   }
 
   const completeTask = (index) => {
     let itemsCopy = [...taskItems]
     itemsCopy.splice(index, 1)
     setTaskItems(itemsCopy);
+    storeTaskLocally(itemsCopy);
+  }
+
+  // Async Storage
+
+  const storeTaskLocally = async (tasks) => {
+    try {
+      await AsyncStorage.removeItem('LocalTaskList')
+      await AsyncStorage.setItem('LocalTaskList', JSON.stringify(tasks));
+      console.log('Tasks has been stored locally')
+    } catch (error) {
+      Alert.alert('Error', 'There was error storing task locally')
+    }
+  }
+
+  const retriveTasks = async () => {
+    try {
+      const storedTasks = await AsyncStorage.getItem('LocalTaskList');
+
+      if (storedTasks !== null) {
+        const arrTasks = JSON.parse(storedTasks)
+        setTaskItems(arrTasks)
+        console.log('Tasks Fetched Success: ', arrTasks);
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Error occured while fetching taks locally')
+    }
   }
 
   return (
