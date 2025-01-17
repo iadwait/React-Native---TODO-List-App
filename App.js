@@ -6,13 +6,17 @@ import { useEffect } from 'react'
 
 export default function App() {
 
+  // Life Cycle Method
+  // ViewDidLoad
   useEffect(() => {
     retriveTasks()
   },[])
 
+  // Varibale Declarations
   const [task, setTask] = useState();
   const [taskItems, setTaskItems] = useState([]);
 
+  // Function call to Add Task and Store List in Async Storage
   const handleAddTask = () => {
     Keyboard.dismiss()
     console.log(task)
@@ -22,6 +26,7 @@ export default function App() {
     storeTaskLocally(newTaskItems)
   }
 
+  // Function call to Complete Task and Update List in Async Storage
   const completeTask = (index) => {
     let itemsCopy = [...taskItems]
     itemsCopy.splice(index, 1)
@@ -29,8 +34,9 @@ export default function App() {
     storeTaskLocally(itemsCopy);
   }
 
-  // Async Storage
+  // Async Storage Functions
 
+  // Function to store Tasks Locally
   const storeTaskLocally = async (tasks) => {
     try {
       await AsyncStorage.removeItem('LocalTaskList')
@@ -41,6 +47,7 @@ export default function App() {
     }
   }
 
+  // Function to retrive Locally Stored Tasks 
   const retriveTasks = async () => {
     try {
       const storedTasks = await AsyncStorage.getItem('LocalTaskList');
@@ -100,6 +107,7 @@ export default function App() {
   );
 }
 
+// Internal Styling
 const styles = StyleSheet.create({
   container: {
     flex: 1,
